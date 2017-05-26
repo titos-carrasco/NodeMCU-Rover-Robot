@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">WiFi Car</string>
+    <string name="Connect">Conectar</string>
+    <string name="ServerPort">Puerta:</string>
+    <string name="ServerAddress">Dirección IP:</string>
+    <string name="ConnectionData">Datos de la Conexión</string>
+    <string name="CannotConnect">"No es posible conectar al robot"</string>
+    <string name="ConnectionLost">"Se perdió la conexión con el robot"</string>
+    <string name="DefaultIP">192.168.196.18</string>
+    <string name="DefaultPort">1963</string>
+</resources>
