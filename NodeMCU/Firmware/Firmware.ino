@@ -1,8 +1,8 @@
 #include <Wire.h>
 #include <ESP8266WiFi.h>
 
-#define WIFI_SSID     "xxxx"
-#define WIFI_PASS     "xxxx"
+#define WIFI_SSID     "xxx"
+#define WIFI_PASS     "xxx"
 #define MyPort        1963
 
 WiFiServer server( MyPort );
@@ -16,7 +16,7 @@ char cmdRecv[ CMD_LEN ];
 // Sensores y Actuadores
 #include "SparkFunHTU21D.h"
 HTU21D htu21d;
-ADC_MODE(ADC_VCC);
+//ADC_MODE(ADC_VCC);
 
 void setup()
 {
@@ -127,8 +127,10 @@ void loop()
         {
           char dataSend[32];
 
-          float vcc = ESP.getVcc()/1000.;
-          dtostrf( vcc, 1, 1, dataSend );
+          //float vcc = ESP.getVcc()/1000.;
+          //dtostrf( vcc, 1, 1, dataSend );
+          unsigned int adc0 = analogRead( A0 );
+          dtostrf( adc0, 1, 0, dataSend );
           yield();
 
           float temp = htu21d.readTemperature();

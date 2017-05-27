@@ -161,7 +161,7 @@ public class ControlActivity extends AppCompatActivity {
             @Override
             public void run() {
                 String data[] = sensors.split( "," );
-                ((TextView)findViewById( R.id.textVoltaje )).setText( data[0] + "V" );
+                ((TextView)findViewById( R.id.textVoltaje )).setText( data[0] );
                 ((TextView)findViewById( R.id.textTemperatura )).setText( data[1] + "°" );
                 ((TextView)findViewById( R.id.textHumedad )).setText( data[2] + "%" );
             }
