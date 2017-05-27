@@ -2,6 +2,7 @@ package rcr.robots.rover.wificar;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.DragEvent;
 import android.view.View;
 import android.util.Log;
 
@@ -14,6 +15,7 @@ import android.widget.Toast;
 public class ControlActivity extends AppCompatActivity {
     private RobotAPI robot;
     private volatile boolean thStop = false;
+    private int lastMove = R.id.botonDetener;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -21,10 +23,24 @@ public class ControlActivity extends AppCompatActivity {
         setContentView( R.layout.activity_control );
 
         showConnecting();
-        robot = new RobotAPI();
-        setSpeed();
         final String ip = getIntent().getStringExtra( "ServerIP" );
         final int port = getIntent().getIntExtra( "ServerPort", -1 );
+        robot = new RobotAPI();
+
+        SeekBar sb = (SeekBar)findViewById( R.id.botonVelocidad );
+        sb.setOnSeekBarChangeListener( new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged( SeekBar seekBar, int progress, boolean user)  {
+                onNavButtonClicked( findViewById( lastMove ) );
+            }
+
+            @Override
+            public void onStartTrackingTouch( SeekBar seekBar ) {}
+
+            @Override
+            public void onStopTrackingTouch( SeekBar seekBar ) {}
+        });
+
         new Thread( new Runnable() {
             @Override
             public void run() {
@@ -61,7 +77,6 @@ public class ControlActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d( "ControlActivity/onStop", "stopping" );
         thStop = true;
         new Thread( new Runnable() {
             @Override
@@ -70,11 +85,7 @@ public class ControlActivity extends AppCompatActivity {
                 robot.disconnect();
             }
         }).start();
-    }
-
-    private void setSpeed() {
-        int speed = ((SeekBar)findViewById( R.id.botonVelocidad )).getProgress();
-        robot.setSpeed( speed );
+        Log.d( "ControlActivity/onStop", "stopping" );
     }
 
     public void onNavButtonClicked( final View v ) {
@@ -82,27 +93,29 @@ public class ControlActivity extends AppCompatActivity {
             @Override
             public void run() {
                 boolean ret = false;
-
-                switch (v.getId()) {
+                int speed = ((SeekBar)findViewById( R.id.botonVelocidad )).getProgress();
+                switch ( v.getId() ) {
                     case R.id.botonDetener:
                         ret = robot.stop();
                         break;
                     case R.id.botonAvanzar:
-                        ret = robot.forward();
+                        ret = robot.forward( speed );
                         break;
                     case R.id.botonRetroceder:
-                        ret = robot.backward();
+                        ret = robot.backward( speed );
                         break;
                     case R.id.botonIzquierda:
-                        ret = robot.left();
+                        ret = robot.left( speed );
                         break;
                     case R.id.botonDerecha:
-                        ret = robot.right();
+                        ret = robot.right( speed );
                         break;
                 }
                 if( !ret ) {
                     showToast( getString( R.string.ConnectionLost ) );
                 }
+                else
+                    lastMove = v.getId();
             }
         }).start();
     }

@@ -4,10 +4,8 @@ import android.util.Log;
 
 import java.net.Socket;
 import java.net.InetSocketAddress;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.BufferedWriter;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 
@@ -15,10 +13,8 @@ public class RobotAPI {
     private Socket sock;
     private BufferedWriter out;
     private BufferedReader in;
-    private int speed;
 
-    public RobotAPI() {
-    }
+    public RobotAPI() {}
 
     public boolean disconnect() {
         try {
@@ -53,30 +49,23 @@ public class RobotAPI {
         }
     }
 
-    public void setSpeed( int s ) {
-        synchronized (this) {
-            speed = s;
-            Log.d( "RobotAPI/setSpeed", String.format( "%d", speed ) );
-        }
+    public boolean stop() { return moveRobot( 0, 0, 0 ); }
+
+    public boolean forward( int speed ) { return moveRobot( speed, 1, 1 ); }
+
+    public boolean backward( int speed ) {
+        return moveRobot( speed, -1, -1 );
     }
 
-    public boolean stop() { return moveRobot( 0, 0 ); }
-
-    public boolean forward() { return moveRobot( 1, 1 ); }
-
-    public boolean backward() {
-        return moveRobot( -1, -1 );
+    public boolean left( int speed ) {
+        return moveRobot( speed, -1, 1 );
     }
 
-    public boolean left() {
-        return moveRobot( -1, 1 );
+    public boolean right( int speed ) {
+        return moveRobot( speed, 1, -1 );
     }
 
-    public boolean right() {
-        return moveRobot( 1, -1 );
-    }
-
-    private boolean moveRobot( int left, int right ) {
+    private boolean moveRobot( int speed, int left, int right ) {
         try {
             synchronized ( this ) {
                 if( sock == null ) return false;
@@ -84,7 +73,7 @@ public class RobotAPI {
                 out.write( cmd );
                 out.flush();
                 String resp = in.readLine();
-                Log.d( "RobotAPI/moveRobot", new String( cmd ) );
+                Log.d( "RobotAPI/moveRobot", cmd );
                 Log.d( "RobotAPI/moveRobot", resp );
                 return true;
             }
@@ -103,7 +92,7 @@ public class RobotAPI {
                 out.flush();
                 String resp = in.readLine();
                 Log.d( "RobotAPI/getSensors", cmd );
-                Log.d( "RobotAPI/moveRobot", resp );
+                Log.d( "RobotAPI/getSensors", resp );
                 return resp;
             }
         } catch( Exception e ) {
