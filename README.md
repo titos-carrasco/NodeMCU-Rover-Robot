@@ -1,15 +1,14 @@
 # NodeMCU-Rover-Robot
-![](Images/Icono.png)
+Robot del tipo rover basado en NodeMCU (ESP8266) y shield de motores
 
-NodeMCU (ESP8266) rover robot WiFi controlled from Android app or Desktop application
+![](images/NodeMCU-Robot.png)
 
-Original code and documentation: [User Manual for WiFi Car by NodeMCU (DoitCar) from ESP8266](https://smartarduino.gitbooks.io/user-manual-for-wifi-car-by-nodemcu-doitcar-/content/)
+![](images/consola-tcp.png)
 
-## My own implementation
+![](images/consola-mqtt.png)
 
-![](Images/NodeMCU-Robot.png)
+Se suministran 3 firmwares para ser modificados desde la IDE de Arduino:
 
-![](Images/Running-1.png)
-![](Images/Running-2.png)
-
-![](Images/Screenshot-1.png) ![](Images/Screenshot-2.png) ![](Images/Screenshot-3.png)
++ Firmware-Demo/: programación autónoma
++ Firmware-MQTT/: control a través de mensajes JSON vía MQTT
++ Firmware-TCP/: control a través de mensajes JSON vía conexión TCP directa
